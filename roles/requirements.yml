@@ -4,3 +4,7 @@
   src: https://github.com/wazuh/wazuh-ansible.git
   scm: git
   version: "4.3"
+
+- name: dogmatics.proxmox-containers
+  src: git@github.com:DogmaticsZA/ansible-role-proxmox-containers.git
+  scm: git
