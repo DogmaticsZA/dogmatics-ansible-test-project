@@ -1,6 +1,6 @@
 ---
 - name: Create Dogmatics Radius Containers
-  hosts: localhost
+  hosts: dangai.dogmatics.co.za
   gather_facts: no
 
   roles:
