@@ -1,0 +1,7 @@
+---
+- name: Create Dogmatics Radius Containers
+  hosts: localhost
+  gather_facts: no
+
+  roles:
+    - dogmatics.proxmox-containers
