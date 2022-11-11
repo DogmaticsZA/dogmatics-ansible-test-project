@@ -8,3 +8,7 @@
 - name: dogmatics.proxmox-containers
   src: git@github.com:DogmaticsZA/ansible-role-proxmox-containers.git
   scm: git
+
+- name: dogmatics.proxmox-virtual-machines
+  src: git@github.com:DogmaticsZA/ansible-role-proxmox-virtual-machines.git
+  scm: git
