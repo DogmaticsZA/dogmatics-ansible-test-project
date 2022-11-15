@@ -1,0 +1,52 @@
+# Certificates generation
+- hosts: wazuh-node01
+  roles:
+    - role: ./wazuh-ansible/wazuh-ansible/roles/wazuh/wazuh-indexer
+      indexer_network_host: "{{ private_ip }}"
+      indexer_cluster_nodes:
+        - "{{ hostvars['wazuh-node01'].private_ip }}"
+        - "{{ hostvars['wazuh-node02'].private_ip }}"
+        - "{{ hostvars['wazuh-node03'].private_ip }}"
+      indexer_discovery_nodes:
+        - "{{ hostvars['wazuh-node01'].private_ip }}"
+        - "{{ hostvars['wazuh-node02'].private_ip }}"
+        - "{{ hostvars['wazuh-node03'].private_ip }}"
+      perform_installation: false
+  become: no
+  tags:
+    - generate-certs
+
+# Wazuh indexer cluster
+- hosts: wazuh-cluster
+  strategy: free
+  roles:
+    - role: ./wazuh-ansible/wazuh-ansible/roles/wazuh/wazuh-indexer
+      indexer_network_host: "{{ private_ip }}"
+  become: yes
+  become_user: root
+
+# Wazuh cluster
+- hosts: wazuh-manager
+  roles:
+    - role: "./wazuh-ansible/wazuh-ansible/roles/wazuh/ansible-wazuh-manager"
+    - role: "./wazuh-ansible/wazuh-ansible/roles/wazuh/ansible-filebeat-oss"
+      filebeat_node_name: wazuh-manager
+  become: yes
+  become_user: root
+
+- hosts: wazuh-worker
+  roles:
+    - role: "./wazuh-ansible/wazuh-ansible/roles/wazuh/ansible-wazuh-manager"
+    - role: "./wazuh-ansible/wazuh-ansible/roles/wazuh/ansible-filebeat-oss"
+      filebeat_node_name: wazuh-worker
+  become: yes
+  become_user: root
+
+# Indexer + dashboard node
+- hosts: wazuh-dashboard
+  roles:
+    - role: "./wazuh-ansible/wazuh-ansible/roles/wazuh/wazuh-indexer"
+    - role: "./wazuh-ansible/wazuh-ansible/roles/wazuh/wazuh-dashboard"
+  become: yes
+  become_user: root
+  vars:
